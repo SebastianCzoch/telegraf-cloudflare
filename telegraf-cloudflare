@@ -1,0 +1,85 @@
+#!/usr/bin/env python
+
+import sys
+import argparse
+import requests
+
+CLOUDFLARE_API_URL = 'https://api.cloudflare.com/client/v4'
+
+
+def __handle_cli(args):
+    parser = argparse.ArgumentParser(
+        description='Plugin for Telegraf for gathering statistics from Cloudflare')
+
+    parser.add_argument(
+        '--zone-id',
+        help='Cloudflare zone ID',
+        default=None,
+        required=True
+    )
+
+    parser.add_argument(
+        '--email',
+        help='Cloudflare email',
+        default=None,
+        required=True
+    )
+
+    parser.add_argument(
+        '--api-key',
+        help='Cloudflare API key',
+        default=None,
+        required=True
+    )
+
+    parser.add_argument(
+        '--interval',
+        help='Interval',
+        default=360,
+    )
+
+    return parser.parse_args(args)
+
+
+def __get_stats(cli):
+    url = '%s/zones/%s/analytics/dashboard?since=-%d&continuous=true' % (
+        CLOUDFLARE_API_URL, cli.zone_id, cli.interval)
+
+    headers = {
+        'X-Auth-Email': cli.email,
+        'X-Auth-Key': cli.api_key,
+        'Content-Type': 'application/json',
+    }
+
+    resp = requests.get(url, headers=headers)
+    if resp.status_code != 200:
+        raise Exception(
+            'Invalid status code, got %s, expected 200' % resp.status_code)
+
+    return resp.json()['result']['totals']
+
+
+def __format_to_telegraf(zone_id, values):
+    line = (
+        'cloudflare,zone_id=%s '
+        'requests_all=%d,requests_cached=%d,requests_uncached=%d,'
+        'requests_encrypted=%d,requests_unencrypted=%d,'
+        'bandwidth_all=%d,bandwidth_cached=%d,bandwidth_uncached=%d'
+    )
+
+    requests = values['requests']
+    bandwidth = values['bandwidth']
+
+    return line % (zone_id, requests['all'], requests['cached'], requests['uncached'],
+                   requests['ssl']['encrypted'], requests['ssl']['unencrypted'], bandwidth['all'], bandwidth['cached'],
+                   bandwidth['uncached'])
+
+
+def main(args):
+    cli = __handle_cli(args)
+    stats = __get_stats(cli)
+    sys.stdout.write(__format_to_telegraf(cli.zone_id, stats))
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
