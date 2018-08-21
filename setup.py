@@ -20,8 +20,8 @@ setuptools.setup(name='telegraf-cloudflare',
                  classifiers=[
                      'Development Status :: 4 - Beta',
                      'Intended Audience :: System Administrators',
-                     'License :: OSI Approved :: MIT License'
-                     'Programming Language :: Python :: 2'
+                     'License :: OSI Approved :: MIT License',
+                     'Programming Language :: Python :: 2',
                      'Operating System :: OS Independent',
                  ],
                  packages=setuptools.find_packages(),
