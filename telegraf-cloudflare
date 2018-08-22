@@ -36,6 +36,7 @@ def __handle_cli(args):
         '--interval',
         help='Interval',
         default=360,
+        type=int
     )
 
     return parser.parse_args(args)
