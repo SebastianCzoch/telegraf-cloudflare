@@ -12,7 +12,7 @@ def read_file(file_name):
 setuptools.setup(name='telegraf-cloudflare',
                  description='Plugin for Telegraf for gathering statistics from Cloudflare',
                  long_description=long_description,
-                 version='0.1.0',
+                 version='0.1.2',
                  url='https://github.com/SebastianCzoch/telegraf-cloudflare',
                  author='Sebastian Czoch',
                  author_email='sebastian@czoch.pl',
