@@ -1,1 +1,2 @@
 requests>=2.19
+mock; python_version < '3.3'
