@@ -1,4 +1,5 @@
 class Metric(object):
+
     def __init__(self, measurement):
         self.measurement = measurement
         self.values = {}
@@ -23,7 +24,7 @@ class Metric(object):
         values = ["%s=%s" % (key, self.values[key]) for key in self.values]
         protocol = "%s %s" % (protocol, ",".join(values))
 
-        if self.timestamp != None:
+        if self.timestamp is not None:
             protocol = "%s %d" % (protocol, self.timestamp)
 
         return protocol

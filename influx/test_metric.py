@@ -1,5 +1,5 @@
 import unittest
-from . import *
+from .metric import Metric
 
 
 class TestMetric(unittest.TestCase):

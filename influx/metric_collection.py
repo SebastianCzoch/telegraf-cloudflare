@@ -1,6 +1,3 @@
-from . import *
-
-
 class MetricCollection(object):
 
     def __init__(self):
