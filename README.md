@@ -1,5 +1,5 @@
 # telegraf-cloudflare
-[![Build Status](https://travis-ci.org/SebastianCzoch/telegraf-cloudflare.svg?branch=master)] [![PyPI version](https://badge.fury.io/py/telegraf-cloudflare.svg)](https://badge.fury.io/py/telegraf-cloudflare) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/SebastianCzoch/telegraf-cloudflare/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/SebastianCzoch/telegraf-cloudflare.svg?branch=master)](https://travis-ci.org/SebastianCzoch/telegraf-cloudflare.svg?branch=master) [![PyPI version](https://badge.fury.io/py/telegraf-cloudflare.svg)](https://badge.fury.io/py/telegraf-cloudflare) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/SebastianCzoch/telegraf-cloudflare/blob/master/LICENSE)
 
 Plugin for Telegraf for gathering statistics from Cloudflare
 
