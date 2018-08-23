@@ -23,7 +23,7 @@ $ telegraf-cloudflare --zone-id ZONE_ID --email you@example.com --api-key SECRET
   * Last 72 hours (value from 4320 to 900): 1 hour resolution
   * Older than 3 days (value 525600 to 4320): 1 day resolution
 
-  Not all intervals are available in all plans, more information available [here](https://api.cloudflare.com/#zone-analytics-dashboard)
+  Not all intervals are available in all plans, more information is available [here](https://api.cloudflare.com/#zone-analytics-dashboard)
 
 ### Example telegraf configuration
 ```
