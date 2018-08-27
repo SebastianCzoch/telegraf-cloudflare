@@ -2,10 +2,7 @@
 
 import sys
 import argparse
-import requests
-
-CLOUDFLARE_API_URL = 'https://api.cloudflare.com/client/v4'
-
+from cloudflare import Client, Parser
 
 def __handle_cli(args):
     parser = argparse.ArgumentParser(
@@ -41,45 +38,12 @@ def __handle_cli(args):
 
     return parser.parse_args(args)
 
-
-def __get_stats(cli):
-    url = '%s/zones/%s/analytics/dashboard?since=-%d&continuous=true' % (
-        CLOUDFLARE_API_URL, cli.zone_id, cli.interval)
-
-    headers = {
-        'X-Auth-Email': cli.email,
-        'X-Auth-Key': cli.api_key,
-        'Content-Type': 'application/json',
-    }
-
-    resp = requests.get(url, headers=headers)
-    if resp.status_code != 200:
-        raise Exception(
-            'Invalid status code, got %s, expected 200' % resp.status_code)
-
-    return resp.json()['result']['totals']
-
-
-def __format_to_telegraf(zone_id, values):
-    line = (
-        'cloudflare,zone_id=%s '
-        'requests_all=%d,requests_cached=%d,requests_uncached=%d,'
-        'requests_encrypted=%d,requests_unencrypted=%d,'
-        'bandwidth_all=%d,bandwidth_cached=%d,bandwidth_uncached=%d'
-    )
-
-    requests = values['requests']
-    bandwidth = values['bandwidth']
-
-    return line % (zone_id, requests['all'], requests['cached'], requests['uncached'],
-                   requests['ssl']['encrypted'], requests['ssl']['unencrypted'], bandwidth['all'], bandwidth['cached'],
-                   bandwidth['uncached'])
-
-
 def main(args):
     cli = __handle_cli(args)
-    stats = __get_stats(cli)
-    sys.stdout.write(__format_to_telegraf(cli.zone_id, stats))
+    stats = Client(cli.zone_id, cli.email, cli.api_key).get_dashboard(cli.interval)
+    parsed = Parser().parse_dashboard(cli.zone_id, stats)
+
+    sys.stdout.write(str(parsed))
 
 
 if __name__ == '__main__':
