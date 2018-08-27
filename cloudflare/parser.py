@@ -1,22 +1,21 @@
-import time
 import calendar
+from dateutil import parser
 from influx import Metric, MetricCollection
 
 
 class Parser(object):
 
-    DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
     NANOSECONDS_MULTIPILER = 10 ** 9
 
     def parse_dashboard(self, zone_id, dashboard):
         collections = MetricCollection()
-        [collections.append(self.__parse_timeserie(zone_id, timeserie)) for timeserie in dashboard['timeseries']]
+        [collections.append(self.parse_timeserie(zone_id, timeserie)) for timeserie in dashboard['timeseries']]
 
         return collections
 
-    def __parse_timeserie(self, zone_id, timeserie):
+    def parse_timeserie(self, zone_id, timeserie):
         metric = Metric('cloudflare')
-        metric.with_timestamp(self.__parse_time(timeserie['until']))
+        metric.with_timestamp(self.parse_time(timeserie['until']))
         metric.add_tag('zone_id', zone_id)
         metric.add_value('uniques', timeserie['uniques']['all'])
         self.__parse_requests(metric, timeserie['requests'])
@@ -56,6 +55,6 @@ class Parser(object):
         for country in bandwidth['country']:
             metric.add_value('bandwidth_country_%s' % country.lower(), bandwidth['country'][country])
 
-    def __parse_time(self, datetime):
-        d = time.strptime(datetime, self.DATETIME_FORMAT)
-        return int(calendar.timegm(d)) * self.NANOSECONDS_MULTIPILER
+    def parse_time(self, datetime):
+        d = parser.parse(datetime)
+        return int(calendar.timegm(d.timetuple())) * self.NANOSECONDS_MULTIPILER

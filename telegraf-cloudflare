@@ -3,6 +3,10 @@
 import sys
 import argparse
 from cloudflare import Client, Parser
+import warnings
+
+if not sys.warnoptions:
+        warnings.simplefilter("ignore")
 
 def __handle_cli(args):
     parser = argparse.ArgumentParser(
