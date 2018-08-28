@@ -58,7 +58,7 @@ class ParserTest(unittest.TestCase):
     def setUp(self):
         self.metric = Metric('cloudflare')
         self.metric.add_tag('zone_id', 'test')
-        self.metric.with_timestamp(1534938300000000000)
+        self.metric.with_timestamp(15376167000000000000)
         self.metric.values = {
             'uniques': '116',
             'requests_all': '258',
@@ -110,3 +110,10 @@ class ParserTest(unittest.TestCase):
 
         self.maxDiff = None
         self.assertDictEqual(expectedCollection.metrics[0].values, collection.metrics[0].values)
+
+    def test_parse_time(self):
+        dtime = '2018-09-22T11:45:00Z'
+        expected_timestamp = 1537616700 * 10**9
+
+        p = Parser()
+        self.assertEqual(p.parse_time(dtime), expected_timestamp)
