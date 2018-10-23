@@ -1,7 +1,6 @@
 import unittest
 from .parser import Parser
-from influx import Metric
-from influx import MetricCollection
+from influx_line_protocol import Metric, MetricCollection
 
 
 class ParserTest(unittest.TestCase):

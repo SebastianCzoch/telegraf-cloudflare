@@ -1,6 +1,6 @@
 import calendar
 from dateutil import parser
-from influx import Metric, MetricCollection
+from influx_line_protocol import Metric, MetricCollection
 
 
 class Parser(object):
